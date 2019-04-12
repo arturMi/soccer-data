@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from model.config import SQLALCHEMY_DATABASE_URI
+import atexit
 
 # import all table-files
 from model.match_statistics import MatchStatistics
@@ -34,8 +35,6 @@ def create_tables():
 
     session.commit()
 
-    session.remove()
-
 
 def save_game_to_database(txt, json):
     """
@@ -46,11 +45,25 @@ def save_game_to_database(txt, json):
     session.commit()
 
 
-def print_season(season):
+def get_match_day_data(season):
     """
-        Print all match day data from season
+        Get all the match day data
     """
-    season = session.query(MatchDayData).filter(MatchDayData.season == season).all()
-    for day in season:
-        print(day)
+    seasons = session.query(MatchDayData).filter(MatchDayData.season == season).all()
+    return seasons
+
+
+def session_commit():
+    """
+        commit the session data
+    """
+    session.commit()
+
+def remvoe_session():
+    """
+        Remove the session
+    """
     session.remove()
+
+
+atexit.register(remvoe_session)
