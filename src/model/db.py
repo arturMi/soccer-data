@@ -21,7 +21,7 @@ def create_tables():
     """
         Create all tables
     """
-    # MatchStatistics.__table__.create(engine)
+    MatchStatistics.__table__.create(engine)
     Match.__table__.create(engine)
     Season.__table__.create(engine)
     MatchReport.__table__.create(engine)
@@ -33,3 +33,12 @@ def create_tables():
     session.commit()
 
     session.remove()
+
+
+def save_game_to_database(txt, json):
+    """
+        Save game to database raw
+    """
+    game = MatchStatistics(text=txt, doc=json)
+    session.add(game)
+    session.commit()
