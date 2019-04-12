@@ -14,3 +14,9 @@ class Match(Base):
     away_team = Column(String, nullable=False)
     goals_home_team = Column(Integer, nullable=False)
     goals_away_team = Column(Integer, nullable=False)
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def __repr__(self):
+        return 'Spieltag' + self.matchday + self.date

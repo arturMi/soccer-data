@@ -23,3 +23,9 @@ class MatchReport(Base):
     tackles_away = Column(Integer)
     corners_home = Column(Integer)
     corners_away = Column(Integer)
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def __repr__(self):
+        return self.website

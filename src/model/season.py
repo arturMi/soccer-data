@@ -10,3 +10,9 @@ class Season(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     league = Column(String, nullable=False)
     year = Column(Integer, nullable=False)
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def __repr__(self):
+        return self.league + self.year

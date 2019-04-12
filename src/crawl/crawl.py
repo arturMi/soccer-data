@@ -68,7 +68,7 @@ def get_game_data(url):
 
                 # Text linie zu python list
                 # match_header_list = ast.literal_eval(match_header_str_wc)
-                print(match_header_str_wc)
+                # print(match_header_str_wc)
 
             # Wenn die Zeile mit substring matchCentreData
             if match_centre.search(line):
@@ -84,6 +84,6 @@ def get_game_data(url):
 
                 # Sting to JSON - pyhton dict
                 match_centre_dict = json.loads(match_centre_str)
-                print(match_centre_dict)
+                # print(match_centre_dict)
 
     save_game_to_database(match_header_str_wc, match_centre_dict)

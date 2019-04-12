@@ -3,7 +3,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from model.config import SQLALCHEMY_DATABASE_URI
 
 # import all table-files
-from model.soccer_data import MatchStatistics
+from model.match_statistics import MatchStatistics
+from model.match_day_data import MatchDayData
 from model.match import Match
 from model.season import Season
 from model.match_report import MatchReport
