@@ -4,8 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-class MatchStatistics(Base):
 
+class MatchStatistics(Base):
     __tablename__ = 'match_statistics'
 
     # columns serial, String, json

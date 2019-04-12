@@ -9,7 +9,7 @@ import requests
 # HTML parser
 from bs4 import BeautifulSoup
 
-from db import save_to_database
+from model.db import save_to_database
 
 # Webseite
 base_url = "https://www.whoscored.com"
