@@ -30,6 +30,7 @@ def create_tables():
     Table.__table__.create(engine)
     Trainer.__table__.create(engine)
     Player.__table__.create(engine)
+    MatchDayData.__table__.create(engine)
 
     session.commit()
 
@@ -43,3 +44,13 @@ def save_game_to_database(txt, json):
     game = MatchStatistics(text=txt, doc=json)
     session.add(game)
     session.commit()
+
+
+def print_season(season):
+    """
+        Print all match day data from season
+    """
+    season = session.query(MatchDayData).filter(MatchDayData.season == season).all()
+    for day in season:
+        print(day)
+    session.remove()
