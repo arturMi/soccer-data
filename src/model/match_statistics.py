@@ -10,8 +10,9 @@ class MatchStatistics(Base):
 
     # columns serial, String, json
     id = Column(Integer, primary_key=True, autoincrement=True)
-    text = Column(String, nullable=False)
-    doc = Column(JSON, nullable=False)
+    url = Column(String, nullable=False)
+    text = Column(String)
+    doc = Column(JSON)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)

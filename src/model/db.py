@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from model.config import SQLALCHEMY_DATABASE_URI
 import atexit
+import ast
 
 # import all table-files
 from model.match_statistics import MatchStatistics
@@ -36,13 +37,10 @@ def create_tables():
     session.commit()
 
 
-def save_game_to_database(txt, json):
-    """
-        Save game to database raw
-    """
-    game = MatchStatistics(text=txt, doc=json)
-    session.add(game)
-    session.commit()
+# def save_game_to_database(txt, json):
+#  game = MatchStatistics(text=txt, doc=json)
+#  session.add(game)
+#  session.commit()
 
 
 def get_match_day_data(season):
@@ -53,17 +51,40 @@ def get_match_day_data(season):
     return seasons
 
 
+def get_match_data():
+    """
+        Get all the match day data
+    """
+    matches = session.query(MatchStatistics).all()
+    return matches
+
+
 def session_commit():
     """
         commit the session data
     """
     session.commit()
 
-def remvoe_session():
+
+def generate_game_url(season):
+    """
+        Build the game url
+    """
+    seasons = get_match_day_data(season)
+    for match_day in seasons:
+        data_list = ast.literal_eval(match_day.data)
+        for match in data_list:
+            url = 'https://www.whoscored.com/Matches/' + str(match[0]) + '/Live'
+            game = MatchStatistics(url=url)
+            session.add(game)
+    session.commit()
+
+
+def remove_session():
     """
         Remove the session
     """
     session.remove()
 
 
-atexit.register(remvoe_session)
+atexit.register(remove_session)
