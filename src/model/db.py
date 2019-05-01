@@ -14,6 +14,7 @@ from model.team import Team
 from model.table import Table
 from model.trainer import Trainer
 from model.player import Player
+from model.events import Event
 
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 session = scoped_session(sessionmaker())
@@ -33,6 +34,7 @@ def create_tables():
     Trainer.__table__.create(engine)
     Player.__table__.create(engine)
     MatchDayData.__table__.create(engine)
+    Event.__table__.create(engine)
 
     session.commit()
 
@@ -45,7 +47,7 @@ def create_tables():
 
 def get_match_day_data(season):
     """
-        Get all the match day data
+        Query um alle Spieltag Daten zu bekommen
     """
     seasons = session.query(MatchDayData).filter(MatchDayData.season == season).all()
     return seasons
@@ -53,7 +55,7 @@ def get_match_day_data(season):
 
 def get_match_data():
     """
-        Get all the match day data
+        Query um alle Spieltage zu bekommen
     """
     matches = session.query(MatchStatistics).all()
     return matches
@@ -61,14 +63,14 @@ def get_match_data():
 
 def session_commit():
     """
-        commit the session data
+        Absichern der Session
     """
     session.commit()
 
 
 def generate_game_url(season):
     """
-        Build the game url
+        Erstellen der Spiel-URL
     """
     seasons = get_match_day_data(season)
     for match_day in seasons:
@@ -82,7 +84,7 @@ def generate_game_url(season):
 
 def remove_session():
     """
-        Remove the session
+        Session beenden
     """
     session.remove()
 

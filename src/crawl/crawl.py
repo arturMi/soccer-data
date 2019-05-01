@@ -13,7 +13,7 @@ from time import sleep
 
 from model.db import get_match_day_data, session_commit, get_match_data
 
-# header damit die Webseite denkt dass mit Browser auf die Seite zugegriffen wird
+# header damit die Webseite denkt, dass mit dem Browser auf die Seite zugegriffen wird
 headers = requests.utils.default_headers()
 headers.update(
     {
@@ -35,7 +35,7 @@ headers.update(
 # Url
 def get_game_data(search_url):
     """
-        Get game data
+        Holt die Spieldaten
     """
 
     # Struktur in der URL finden, alle URL der Spiele crawlen
@@ -51,7 +51,7 @@ def get_game_data(search_url):
     main = html.find(id='layout-content-wrapper').prettify()
     # print(main)
 
-    # Speichern die Main als Text File
+    # Speichert die Main als Text File
     # Weil ansonsten nach 5 - 10 requests wird IP geblockt
     # Speichern die HTML als lokale File ab
     with open("tmp.txt", "w") as f:
@@ -64,8 +64,8 @@ def get_game_data(search_url):
     # Finde Zeile mit substring matchCentreData
     match_centre = re.compile(r'matchCentreData')
 
-    # Öffne text file was ich gespeichert habe
-    # itereiere jeden Zeilensprung
+    # Öffne text file die gespeichert wurde
+    # Itereiere jeden Zeilensprung
     # line ist eine Linie im Text file
     with open('tmp.txt', 'r', encoding='ascii') as file:
         for line in file:
@@ -76,7 +76,7 @@ def get_game_data(search_url):
                 # Alles was zwischen den Eckigen Klammern ist
                 match_header_str = re.findall('\[.*?\]', line)[0]
 
-                # Jede stelle mit zwei Kommas hinter einander ersetzen durch ein Komma
+                # Jede stelle mit zwei Kommas hintereinander ersetzen durch ein Komma
                 match_header_str_wc = match_header_str.replace(',,', '')
 
                 # Text linie zu python list
@@ -86,8 +86,8 @@ def get_game_data(search_url):
             # Wenn die Zeile mit substring matchCentreData
             if match_centre.search(line):
                 # print(line)
-                #  wir holen die linie mit dem substring matchCentreData
-                # holen und alle characters zwischen '= ... ;'
+                # Holt die Linie mit dem Substring matchCentreData
+                # Holt alle Characters zwischen '= ... ;'
                 match_centre_str = re.findall('=.*?;', line)[0]
 
                 # Lösche "= " aus dem String
@@ -104,39 +104,39 @@ def get_game_data(search_url):
 
 def crawl_match_day_data(season):
     """
-        Get raw match day data
+        Holt die ungefilterten Spieldaten
     """
-    # get seasons
+    # Holt die Saisons
     seasons = get_match_day_data(season)
-    # iterate over seasons
+    # Iteriert über die Saisons
     for match_day in seasons:
         if not match_day.crawled:
             print(match_day.match_day_url)
-            # get query
+            # Query um die match_day_url zu holen
             response = requests.get((match_day.match_day_url), headers=headers)
-            # response text
+            # Fügt die Rückgabe in response in "data" ein, das Attribut "crawled" auf true
             match_day.data = response.text
             match_day.crawled = True
-            # Sleep between 5 and 50 seconds
+            # Pausiert zwischen 5 und 50 Sekunden
             sleep(randint(5, 50))
     session_commit()
 
 
 def crawl_match_data():
     """
-        Get raw match data
+        Holt die ungefilterten Spieldaten
     """
-    # get matches
+    # Abfragen der Spiele
     matches_list = get_match_data()
     for match in matches_list:
         if not match.text:
             # return result list of two elements
             res = get_game_data(match.url)
-            # get text data
+            # Holt den Text
             match.text = res[0]
-            # load json
+            # Holt die JSON
             match.doc = res[1]
-            # commit
+            # Sichert die Session ab, nach jedem Spiel
             session_commit()
-            # sleep between 30 and 90 seconds
+            # Pausiert zwischen 30 und 90 Sekunden
             sleep(randint(30, 90))
