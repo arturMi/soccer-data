@@ -1,4 +1,16 @@
-from model.db import get_match_data
+from model.db import get_match_data, session_add, session_commit, check_league
+from model.season import Season
+from model.league import League
+
+
+def parse():
+    # add bundesliga if not already in there
+    # add bundesliga
+    l = "Bundesliga"
+    c = 'Germany'
+    y = 2017
+    add_league_season(l, c, y)
+
 
 def parse_to_match():
     matches = get_match_data()
@@ -19,6 +31,7 @@ def parse_to_match():
 
         # Statistiken Auswärts
 
+
 def parse_to_player():
     matches = get_match_data()
     for match in matches:
@@ -32,7 +45,7 @@ def parse_to_player():
         match.doc["home"]["managerName"]
         # Durchschnittsalter Heim
         match.doc["home"]["averageAge"]
-        #Spieler Heim-Team
+        # Spieler Heim-Team
         for player in match.doc["home"]["players"]:
             # Unique Player-ID
             player["playerId"]
@@ -83,7 +96,7 @@ def parse_to_player():
             match.doc["away"]["averageAge"]
             # Spieler Auswärts-Team
         for player in match.doc["away"]["players"]:
-            #Spieler ID
+            # Spieler ID
             player["playerId"]
             # Name
             player["name"]
@@ -97,6 +110,18 @@ def parse_to_player():
             player["isFirstEleven"]
             # Man of the Match boolean
             player["isManOfTheMatch"]
+
+
+def add_league_season(name, country, year):
+    if not check_league(name):
+        bl = League(name=name, country=country)
+        session_add(bl)
+        session_commit()
+        # add season to the league
+        season = Season(league_id=bl.id, year=year)
+        session_add(season)
+        session_commit()
+
 '''
 def parse_to_team():
     matches = get_match_data()

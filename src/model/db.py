@@ -76,6 +76,13 @@ def session_commit():
     session.commit()
 
 
+def session_add(obj):
+    """
+        Add obj to session
+    """
+    session.add(obj)
+
+
 def generate_game_url(season):
     """
         Erstellen der Spiel-URL
@@ -95,6 +102,10 @@ def remove_session():
         Session beenden
     """
     session.remove()
+
+
+def check_league(name):
+    return session.query(League).filter(League.name == name).count()
 
 
 atexit.register(remove_session)

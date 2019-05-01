@@ -9,8 +9,8 @@ class TeamPlayerAss(Base):
     __tablename__ = 'team_player_ass'
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    team_id = Column(Integer, nullable=False, ForeignKey('team.id')
-    player_id = Column(Integer, nullable=False, ForeignKey('player.id'))
+    team_id = Column(Integer, ForeignKey('team.id'), nullable=False)
+    player_id = Column(Integer, ForeignKey('player.id'), nullable=False)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)

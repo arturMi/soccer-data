@@ -8,9 +8,9 @@ class Match(Base):
     __tablename__ = 'match'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    season_id = Column(Integer, nullable=False, ForeignKey('season.id'))
-    home_team_id = Column(Integer, nullable=False, ForeignKey('team.id'))
-    away_team_id = Column(Integer, nullable=False, ForeignKey('team.id'))
+    season_id = Column(Integer, ForeignKey('season.id'), nullable=False)
+    home_team_id = Column(Integer, ForeignKey('team.id'), nullable=False)
+    away_team_id = Column(Integer,ForeignKey('team.id') , nullable=False)
     date = Column(Date, nullable=False)
     matchday = Column(Integer, nullable=False)
     home_team = Column(VARCHAR, nullable=False)

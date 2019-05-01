@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, VARCHAR
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
@@ -15,4 +16,4 @@ class League(Base):
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        return self.league + self.year
+        return self.league
