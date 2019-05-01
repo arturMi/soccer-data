@@ -14,7 +14,11 @@ from model.team import Team
 from model.table import Table
 from model.trainer import Trainer
 from model.player import Player
-from model.events import Event
+from model.event import Event
+from model.league import League
+from model.match_repor_event_ass import MatchReportAss
+from model.team_player_ass import TeamPlayerAss
+from model.team_trainer_ass import TeamTrainerAss
 
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 session = scoped_session(sessionmaker())
@@ -35,6 +39,10 @@ def create_tables():
     Player.__table__.create(engine)
     MatchDayData.__table__.create(engine)
     Event.__table__.create(engine)
+    League.__table__.create(engine)
+    MatchReportAss.__table__.create(engine)
+    TeamPlayerAss.__table__.create(engine)
+    TeamTrainerAss.__table__.create(engine)
 
     session.commit()
 

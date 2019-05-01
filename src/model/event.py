@@ -5,11 +5,11 @@ Base = declarative_base()
 
 
 class Event(Base):
-    __tablename__ = 'events'
+    __tablename__ = 'event'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    teamId = Column(Integer)
-    data = Column(JSON)
+    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    teamId = Column(Integer, nullable=False)
+    data = Column(JSON, nullable=False)
 
 
     def __init__(self, **kwargs):

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, Date, VARCHAR, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -8,10 +8,13 @@ class Match(Base):
     __tablename__ = 'match'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    season_id = Column(Integer, nullable=False, ForeignKey('season.id'))
+    home_team_id = Column(Integer, nullable=False, ForeignKey('team.id'))
+    away_team_id = Column(Integer, nullable=False, ForeignKey('team.id'))
     date = Column(Date, nullable=False)
     matchday = Column(Integer, nullable=False)
-    home_team = Column(String, nullable=False)
-    away_team = Column(String, nullable=False)
+    home_team = Column(VARCHAR, nullable=False)
+    away_team = Column(VARCHAR, nullable=False)
     goals_home_team = Column(Integer, nullable=False)
     goals_away_team = Column(Integer, nullable=False)
 

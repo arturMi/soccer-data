@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -8,7 +8,7 @@ class Season(Base):
     __tablename__ = 'season'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    league = Column(String, nullable=False)
+    league_id = Column(Integer, nullable=False, ForeignKey('league.id'))
     year = Column(Integer, nullable=False)
 
     def __init__(self, **kwargs):

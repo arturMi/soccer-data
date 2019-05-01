@@ -22,62 +22,81 @@ def parse_to_match():
 def parse_to_player():
     matches = get_match_data()
     for match in matches:
-        # # Unique Team-ID
-        # match.doc["home"]["teamId"]
-        # # Team Name
-        # match.doc["home"]["name"]
-        # # Land des Teams
-        # match.doc["home"]["countryName"]
-        # # Manager des Teams
-        # match.doc["home"]["managerName"]
-        # # Durchschnittsalter Heim
-        # match.doc["home"]["averageAge"]
-        # #Spieler Heim-Team
+        # Unique Team-ID
+        match.doc["home"]["teamId"]
+        # Team Name
+        match.doc["home"]["name"]
+        # Land des Teams
+        match.doc["home"]["countryName"]
+        # Manager des Teams
+        match.doc["home"]["managerName"]
+        # Durchschnittsalter Heim
+        match.doc["home"]["averageAge"]
+        #Spieler Heim-Team
         for player in match.doc["home"]["players"]:
-        #     # Unique Player-ID
-        #     player["playerId"]
-        #     # Name
-        #     player["name"]
-        #     # Größe
-        #     player["height"]
-        #     # Gewicht
-        #     player["weight"]
-        #     # Alter
-        #     player["age"]
-        #     # Startelf boolean
-        #     player["isFirstEleven"]
-        #     # Man of the Match boolean
-        #     player["isManOfTheMatch"]
-        #
+            # Unique Player-ID
+            player["playerId"]
+            # Name
+            player["name"]
+            # Größe
+            player["height"]
+            # Gewicht
+            player["weight"]
+            # Alter
+            player["age"]
+            # Startelf boolean
+            player["isFirstEleven"]
+            # Man of the Match boolean
+            player["isManOfTheMatch"]
+            # Statistik
             if "totalSaves" in player["stats"]:
-                print(player["stats"]["totalSaves"])
-        #
-        # #Auswärts-Team
-        # # Unique Team-ID
-        # match.doc["away"]["teamId"]
-        # # Team Name
-        # match.doc["away"]["name"]
-        # # Land des Teams
-        # match.doc["away"]["countryName"]
-        # # Manager des Teams
-        # match.doc["away"]["managerName"]
-        # # Durchschnittsalter Auswärts
-        # match.doc["away"]["averageAge"]
-        # # Spieler Auswärts-Team
-        # for player in match.doc["away"]["players"]:
-        #     player["playerId"]
-        #     # Name
-        #     player["name"]
-        #     # Größe
-        #     player["height"]
-        #     # Gewicht
-        #     player["weight"]
-        #     # Alter
-        #     player["age"]
-        #     # Startelf boolean
-        #     player["isFirstEleven"]
-        #     # Man of the Match boolean
-        #     player["isManOfTheMatch"]
+                player["stats"]["totalSaves"]
+
+            if "collected" in player["stats"]:
+                player["stats"]["collected"]
+
+            if "claimsHigh" in player["stats"]:
+                player["stats"]["claimsHigh"]
+
+            if "posession" in player["stats"]:
+                player["stats"]["possesion"]
+
+            if "ratings" in player["stats"]:
+                player["stats"]["ratings"]
+
+            if "clearances" in player["stats"]:
+                player["stats"]["clearances"]
+
+            if "touches" in player["stats"]:
+                player["stats"]["touches"]
+
+            # Auswärts-Team
+            # Unique Team-ID
+            match.doc["away"]["teamId"]
+            # Team Name
+            match.doc["away"]["name"]
+            # Land des Teams
+            match.doc["away"]["countryName"]
+            # Manager des Teams
+            match.doc["away"]["managerName"]
+            # Durchschnittsalter Auswärts
+            match.doc["away"]["averageAge"]
+            # Spieler Auswärts-Team
+        for player in match.doc["away"]["players"]:
+            #Spieler ID
+            player["playerId"]
+            # Name
+            player["name"]
+            # Größe
+            player["height"]
+            # Gewicht
+            player["weight"]
+            # Alter
+            player["age"]
+            # Startelf boolean
+            player["isFirstEleven"]
+            # Man of the Match boolean
+            player["isManOfTheMatch"]
 '''
 def parse_to_team():
     matches = get_match_data()

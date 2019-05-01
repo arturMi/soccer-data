@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, VARCHAR, Date
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -9,7 +9,9 @@ class Table(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(Date, nullable=False)
-    table = Column(String, nullable=False)
+    table = Column(VARCHAR, nullable=False)
+    match_day = Column(Integer, nullable=False)
+    season_id = Column(Integer, nullable=False, ForeignKey('season.id'))
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
