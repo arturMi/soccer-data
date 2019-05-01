@@ -1,6 +1,13 @@
-from model.db import get_match_data, session_add, session_commit, check_league
+from model.db import get_match_data, session_add, session_commit, check_league, check_team, check_trainer, get_trainer, \
+    get_team
 from model.season import Season
 from model.league import League
+
+from model.team import Team
+from model.trainer import Trainer
+from model.team_trainer_ass import TeamTrainerAss
+
+from dateutil import parser
 
 
 def parse():
@@ -10,6 +17,13 @@ def parse():
     c = 'Germany'
     y = 2017
     add_league_season(l, c, y)
+
+    matches = get_match_data()
+    for match in matches:
+        # add match
+        add_match(match)
+        # add trainer team
+        add_trainer_team(match)
 
 
 def parse_to_match():
@@ -121,6 +135,47 @@ def add_league_season(name, country, year):
         season = Season(league_id=bl.id, year=year)
         session_add(season)
         session_commit()
+
+
+def add_match(match):
+    print('ACAB')
+
+
+def add_trainer_team(match):
+    home_team_trainer = match.doc["home"]["managerName"]
+    print(home_team_trainer)
+
+    # add team
+    home_team_id = match.doc["home"]["teamId"]
+    home_team_name = match.doc["home"]["name"]
+
+    # start time
+    start_time = parser.parse(match.doc["startTime"])
+    print(start_time)  #
+    #
+    # add trainer
+    if not check_trainer(home_team_trainer):
+        home_trainer = Trainer(name=home_team_trainer)
+        session_add(home_trainer)
+        session_commit()
+    else:
+        home_trainer = get_trainer(home_team_trainer)
+
+    # add team
+    if not check_team(home_team_id):
+        home_team = Team(id=home_team_id, team_name=home_team_name)
+        session_add(home_team)
+        session_commit()
+    else:
+        home_team = get_team(home_team_id)
+
+    # add relationship between
+    print(home_team.id)
+    print(home_trainer.id)
+    asso = TeamTrainerAss(team_id=home_team.id, trainer_id=home_trainer.id, date=start_time)
+    session_add(asso)
+    session_commit()
+
 
 '''
 def parse_to_team():

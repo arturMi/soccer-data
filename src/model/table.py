@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Integer, VARCHAR, Date, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
+from model.season import Season
+
 Base = declarative_base()
 
 
@@ -11,7 +13,7 @@ class Table(Base):
     date = Column(Date, nullable=False)
     table = Column(VARCHAR, nullable=False)
     match_day = Column(Integer, nullable=False)
-    season_id = Column(Integer, ForeignKey('season.id'), nullable=False)
+    season_id = Column(Integer, ForeignKey(Season.id), nullable=False)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)

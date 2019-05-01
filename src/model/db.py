@@ -108,4 +108,20 @@ def check_league(name):
     return session.query(League).filter(League.name == name).count()
 
 
+def check_trainer(name):
+    return session.query(Trainer).filter(Trainer.name == name).count()
+
+
+def get_trainer(name):
+    return session.query(Trainer).filter(Trainer.name == name).first()
+
+
+def check_team(id):
+    return session.query(Team).filter(Team.id == id).count()
+
+
+def get_team(id):
+    return session.query(Team).filter(Team.id == id).first()
+
+
 atexit.register(remove_session)

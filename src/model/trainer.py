@@ -17,4 +17,4 @@ class Trainer(Base):
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        return self.first_name + self.name
+        return self.name

@@ -7,6 +7,6 @@ Base = declarative_base()
 class Team(Base):
     __tablename__ = 'team'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True)
     team_name = Column(VARCHAR, nullable=False)
     city = Column(VARCHAR, nullable=False)

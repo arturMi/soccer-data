@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
+from model.match import Match
+
 Base = declarative_base()
 
 
@@ -9,7 +11,7 @@ class MatchReport(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     website = Column(String, nullable=False)
-    match_id = Column(Integer, ForeignKey('match.id'), nullable=False)
+    match_id = Column(Integer, ForeignKey(Match.id), nullable=False)
     total_shots_home = Column(Integer)
     total_shots_away = Column(Integer)
     posession_home = Column(Integer)
