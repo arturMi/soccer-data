@@ -1,6 +1,6 @@
 from model.db import create_tables, get_match_day_data, generate_game_url, get_match_data
 from crawl.crawl import get_game_data, crawl_match_day_data, crawl_match_data
-from crawl.parse import parse_to_player, parse_to_match, parse
+from crawl.parse import parse
 
 
 if __name__ == "__main__":

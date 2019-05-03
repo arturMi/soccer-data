@@ -78,7 +78,7 @@ def session_commit():
 
 def session_add(obj):
     """
-        Add obj to session
+        Objekt zur Session hinzufügen
     """
     session.add(obj)
 
@@ -105,22 +105,48 @@ def remove_session():
 
 
 def check_league(name):
+    """
+        Liga prüfen
+    """
     return session.query(League).filter(League.name == name).count()
 
 
 def check_trainer(name):
+    """
+        Trainer prüfen
+    """
     return session.query(Trainer).filter(Trainer.name == name).count()
 
 
 def get_trainer(name):
+    """
+        Name des Trainers holen
+    """
     return session.query(Trainer).filter(Trainer.name == name).first()
 
+def check_player(id):
+    """
+        Spieler prüfen
+    """
+    return session.query(Trainer).filter(Player.id == id).count()
+
+def get_player(id):
+    """
+        Spieler ID holen
+    """
+    return session.query(Player).filter(Player.id == id).first()
 
 def check_team(id):
+    """
+        Team prüfen
+    """
     return session.query(Team).filter(Team.id == id).count()
 
 
 def get_team(id):
+    """
+        Team ID holen
+    """
     return session.query(Team).filter(Team.id == id).first()
 
 
