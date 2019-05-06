@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from model.season import Season
 from model.team import Team
+from model.referee import Referee
 
 Base = declarative_base()
 
@@ -14,6 +15,7 @@ class Match(Base):
     season_id = Column(Integer, ForeignKey(Season.id), nullable=False)
     home_team_id = Column(Integer, ForeignKey(Team.id), nullable=False)
     away_team_id = Column(Integer, ForeignKey(Team.id), nullable=False)
+    referee_id = Column(Integer, ForeignKey(Referee.id), nullable=False)
     date = Column(Date)
     matchday = Column(Integer)
     home_team = Column(VARCHAR)

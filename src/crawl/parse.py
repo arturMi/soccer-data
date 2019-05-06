@@ -9,6 +9,7 @@ from model.trainer import Trainer
 from model.player import Player
 from model.event import Event
 from model.match import Match
+from model.referee import Referee
 from model.match_report import MatchReport
 from model.team_trainer_ass import TeamTrainerAss
 from model.team_player_ass import TeamPlayerAss
@@ -32,10 +33,11 @@ def parse():
         add_player_team(match)
         # Trainer Team hinzufügen
         # add_trainer_team(match)
-        # Match hinzufügen
-        # add_match(match)
+        # Add Referee
+        add_referee()
         # Event Match Report hinzufügen
         add_event_match_report(match)
+        #Add Referee
 
 def add_league_season(name, country, year):
     if not check_league(name):
@@ -50,8 +52,17 @@ def add_league_season(name, country, year):
 
 def add_player_team(match):
     # Heim Team-ID und Team Name
-    home_team_id = match.doc["home"]["teamId"]
-    home_team_name = match.doc["home"]["name"]
+    if "home" in match.doc:
+        if "teamId" in match.doc["home"]:
+            home_team_id = match.doc["home"]["teamId"]
+        else:
+            print("No value in home.teamId")
+        if "name" in match.doc["home"]:
+            home_team_name = match.doc["home"]["name"]
+        else:
+            print("No value in name")
+    else:
+        print("No value in home")
 
     # Start des Spiels
     start_time = parser.parse(match.doc["startTime"])
@@ -224,6 +235,7 @@ def add_event_match_report(match):
     away_team_id = match.doc["away"]["teamId"]
     league = get_league("Bundesliga")
     season_id = get_season(2017, league.id).id
+    referee_id = match.doc["referee"]["officialId"]
 
     # Spieler hinzufügen
     match_game = Match(home_team=home_team, season_id=season_id, away_team=away_team, away_team_id=away_team_id,
@@ -285,3 +297,11 @@ def add_event_match_report(match):
     session_add(asso)
     session_commit()
 
+def add_referee(match):
+    referee_id = match.doc["referee"]["officialId"]
+    referee_first_name = match.doc["referee"]["firstName"]
+    referee_last_name = match.doc["referee"]["lastName"]
+
+    referee = Referee(id=referee_id, first_name=referee_first_name, last_name=referee_last_name)
+    session_add(referee)
+    session_commit()
