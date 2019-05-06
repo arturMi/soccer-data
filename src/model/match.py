@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Date, VARCHAR, ForeignKey
+from sqlalchemy import Column, Integer, Date, VARCHAR, ForeignKey, Text
 from sqlalchemy.ext.declarative import declarative_base
 
 from model.season import Season
@@ -14,12 +14,13 @@ class Match(Base):
     season_id = Column(Integer, ForeignKey(Season.id), nullable=False)
     home_team_id = Column(Integer, ForeignKey(Team.id), nullable=False)
     away_team_id = Column(Integer, ForeignKey(Team.id), nullable=False)
-    date = Column(Date, nullable=False)
-    matchday = Column(Integer, nullable=False)
-    home_team = Column(VARCHAR, nullable=False)
-    away_team = Column(VARCHAR, nullable=False)
-    goals_home_team = Column(Integer, nullable=False)
-    goals_away_team = Column(Integer, nullable=False)
+    date = Column(Date)
+    matchday = Column(Integer)
+    home_team = Column(VARCHAR)
+    away_team = Column(VARCHAR)
+    score_ht = Column(VARCHAR)
+    Score = Column(VARCHAR)
+    location = Column(VARCHAR)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)

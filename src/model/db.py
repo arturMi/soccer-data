@@ -149,5 +149,40 @@ def get_team(id):
     """
     return session.query(Team).filter(Team.id == id).first()
 
+def check_event(id):
+    """
+        Event prüfen
+    """
+    return session.query(Event).filter(Event.id == id).count()
+
+def get_event(id):
+    """
+        Event ID holen
+    """
+    return session.query(Event).filter(Event.id == id).first()
+
+def check_report(id):
+    """
+        Event prüfen
+    """
+    return session.query(MatchReport).filter(MatchReport.id == id).count()
+
+def get_report(id):
+    """
+        Event ID holen
+    """
+    return session.query(MatchReport).filter(MatchReport.id == id).first()
+
+def check_match(id):
+    """
+        Event prüfen
+    """
+    return session.query(Match).filter(Match.id == id).count()
+
+def get_match(id):
+    """
+        Event ID holen
+    """
+    return session.query(Match).filter(Match.id == id).first()
 
 atexit.register(remove_session)
