@@ -1,6 +1,5 @@
-from model.db import get_match_data, session_add, session_commit, check_league, check_team, check_trainer, get_trainer, \
-    get_team, check_player, get_player, check_event, get_event, check_report, get_report, check_match, get_match, \
-    get_league, get_season
+from model.db import get_match_data, session_add, session_commit, check_league, check_team, check_trainer, get_trainer,\
+    get_team, check_player, get_player, get_league, get_season
 from model.season import Season
 from model.league import League
 
@@ -14,9 +13,9 @@ from model.match_report import MatchReport
 from model.team_trainer_ass import TeamTrainerAss
 from model.team_player_ass import TeamPlayerAss
 from model.match_repor_event_ass import MatchReportAss
+from dateutil import parser
 
 import json
-from dateutil import parser
 
 
 def parse():
@@ -37,7 +36,7 @@ def parse():
         add_referee()
         # Event Match Report hinzufügen
         add_event_match_report(match)
-        #Add Referee
+
 
 def add_league_season(name, country, year):
     if not check_league(name):
@@ -246,7 +245,7 @@ def add_event_match_report(match):
 
     # Event hinzufügen
     for event in match.doc["events"]:
-        #event_id = event["id"]
+        # event_id = event["id"]
         team_id = event["teamId"]
         minute = event["minute"]
         if "second" in event:
@@ -264,18 +263,39 @@ def add_event_match_report(match):
         else:
             event_outcome = False
 
-
-        event = Event(team_id=team_id, minute=minute, second=second, type=event_type,
-                        outcome_successful=event_outcome, x=x_coord, y=y_coord, data=event_doc)
+        event = Event(team_id=team_id, minute=minute, second=second, type=event_type, outcome_successful=event_outcome,
+                      x=x_coord, y=y_coord, data=event_doc)
         session_add(event)
         session_commit()
-
 
     # Report Heim
 
     home_average_age = match.doc["home"]["averageAge"]
     home_scores = match.doc["home"]["scores"]["fulltime"]
     home_scores_halftime = match.doc["home"]["scores"]["halftime"]
+    home_ratings = json.dumps(match.doc["home"]["stats"]["ratings"])
+    home_shots_total = home_ratings = json.dumps(match.doc["home"]["stats"]["shotsTotal"])
+    home_shots_on_target = json.dumps(match.doc["home"]["stats"]["shotsOnTarget"])
+    home_shots_off_target = json.dumps(match.doc["home"]["stats"]["shotsOffTarget"])
+    home_shots_blocked = json.dumps(match.doc["home"]["stats"]["shotsBlocked"])
+    home_clearances = json.dumps(match.doc["home"]["stats"]["clearances"])
+    home_interceptions = json.dumps(match.doc["home"]["stats"]["interceptions"])
+    home_possesion = json.dumps(match.doc["home"]["stats"]["possession"])
+    home_touches = json.dumps(match.doc["home"]["stats"]["touches"])
+    home_passes_total = json.dumps(match.doc["home"]["stats"]["passesTotal"])
+    home_passes_accurate = json.dumps(match.doc["home"]["stats"]["passesAccurate"])
+    home_passes_key = json.dumps(match.doc["home"]["stats"]["passesKey"])
+    home_pass_success = json.dumps(match.doc["home"]["stats"]["passSuccess"])
+    home_aerials_total = json.dumps(match.doc["home"]["stats"]["aerialsTotal"])
+    home_aerials_won = json.dumps(match.doc["home"]["stats"]["aerialsWon"])
+    home_aerials_success = json.dumps(match.doc["home"]["stats"]["aerialsSuccess"])
+    home_offensive_aerials = json.dumps(match.doc["home"]["stats"]["offensiveAerials"])
+    home_defensive_aerials = json.dumps(match.doc["home"]["stats"]["defensiveAerials"])
+    home_corners_total = json.dumps(match.doc["home"]["stats"]["cornersTotal"])
+    home_throw_ins_total = json.dumps(match.doc["home"]["stats"]["throwInsTotal"])
+    home_throw_ins_accurate = json.dumps(match.doc["home"]["stats"]["throwInsAccurate"])
+    home_fouls_commited = json.dumps(match.doc["home"]["stats"]["foulsCommited"])
+    home_tackles_total = json.dumps(match.doc["home"]["stats"]["tacklesTotal"])
 
     # Report Auswärts
 
@@ -296,6 +316,7 @@ def add_event_match_report(match):
     asso = MatchReportAss(event_id=event.id, match_report_id=match_report.id)
     session_add(asso)
     session_commit()
+
 
 def add_referee(match):
     referee_id = match.doc["referee"]["officialId"]
