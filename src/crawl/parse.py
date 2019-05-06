@@ -33,7 +33,7 @@ def parse():
         # Trainer Team hinzufügen
         # add_trainer_team(match)
         # Add Referee
-        add_referee()
+        add_referee(match)
         # Event Match Report hinzufügen
         add_event_match_report(match)
 
@@ -310,9 +310,6 @@ def add_event_match_report(match):
     away_average_age = match.doc["away"]["averageAge"]
     away_scores = match.doc["away"]["scores"]["fulltime"]
     away_scores_halftime = match.doc["away"]["scores"]["halftime"]
-    away_average_age = match.doc["away"]["averageAge"]
-    away_scores = match.doc["away"]["scores"]["fulltime"]
-    away_scores_halftime = match.doc["away"]["scores"]["halftime"]
     away_ratings = json.dumps(match.doc["away"]["stats"]["ratings"])
     away_shots_total = json.dumps(match.doc["away"]["stats"]["shotsTotal"])
     away_shots_on_target = json.dumps(match.doc["away"]["stats"]["shotsOnTarget"])
@@ -383,7 +380,7 @@ def add_event_match_report(match):
                                home_dribbles_won=home_dribbles_won,
                                home_dribbles_attempted=home_dribbles_attempted,
                                home_dribbles_lost=home_dribbles_lost,
-                               home_dribbleSuccess=home_dribbleSuccess,
+                               home_dribble_success=home_dribbleSuccess,
                                home_dispossessed=home_dispossessed,
                                home_incident_events=home_incident_events,
                                # Away Attributes
@@ -420,10 +417,9 @@ def add_event_match_report(match):
                                away_dribbles_won=away_dribbles_won,
                                away_dribbles_attempted=away_dribbles_attempted,
                                away_dribbles_lost=away_dribbles_lost,
-                               away_dribbleSuccess=away_dribbleSuccess,
+                               away_dribble_success=away_dribbleSuccess,
                                away_dispossessed=away_dispossessed,
-                               away_incident_events=away_incident_events
-                               )
+                               away_incident_events=away_incident_events)
     session_add(match_report)
     session_commit()
 
