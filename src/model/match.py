@@ -19,7 +19,7 @@ class Match(Base):
     home_team = Column(VARCHAR)
     away_team = Column(VARCHAR)
     score_ht = Column(VARCHAR)
-    Score = Column(VARCHAR)
+    score = Column(VARCHAR)
     location = Column(VARCHAR)
 
     def __init__(self, **kwargs):

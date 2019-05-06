@@ -111,6 +111,18 @@ def check_league(name):
     return session.query(League).filter(League.name == name).count()
 
 
+def get_league(name):
+    """
+        Liga holen
+    """
+    return session.query(League).filter(League.name == name).first()
+
+def get_season(year, league_id):
+    """
+        Liga holen
+    """
+    return session.query(Season).filter(Season.year == year, Season.league_id == league_id).first()
+
 def check_trainer(name):
     """
         Trainer prüfen
