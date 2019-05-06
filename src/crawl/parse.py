@@ -1,4 +1,4 @@
-from model.db import get_match_data, session_add, session_commit, check_league, check_team, check_trainer, get_trainer,\
+from model.db import get_match_data, session_add, session_commit, check_league, check_team, check_trainer, get_trainer, \
     get_team, check_player, get_player, get_league, get_season
 from model.season import Season
 from model.league import League
@@ -268,13 +268,12 @@ def add_event_match_report(match):
         session_add(event)
         session_commit()
 
-    # Report Heim
-
+    # Matchreport Heim
     home_average_age = match.doc["home"]["averageAge"]
     home_scores = match.doc["home"]["scores"]["fulltime"]
     home_scores_halftime = match.doc["home"]["scores"]["halftime"]
     home_ratings = json.dumps(match.doc["home"]["stats"]["ratings"])
-    home_shots_total = home_ratings = json.dumps(match.doc["home"]["stats"]["shotsTotal"])
+    home_shots_total = json.dumps(match.doc["home"]["stats"]["shotsTotal"])
     home_shots_on_target = json.dumps(match.doc["home"]["stats"]["shotsOnTarget"])
     home_shots_off_target = json.dumps(match.doc["home"]["stats"]["shotsOffTarget"])
     home_shots_blocked = json.dumps(match.doc["home"]["stats"]["shotsBlocked"])
@@ -296,19 +295,135 @@ def add_event_match_report(match):
     home_throw_ins_accurate = json.dumps(match.doc["home"]["stats"]["throwInsAccurate"])
     home_fouls_commited = json.dumps(match.doc["home"]["stats"]["foulsCommited"])
     home_tackles_total = json.dumps(match.doc["home"]["stats"]["tacklesTotal"])
+    home_tackles_successful = json.dumps(match.doc["home"]["stats"]["tacklesSuccessful"])
+    home_tackles_unsuccesful = json.dumps(match.doc["home"]["stats"]["tacklesUnsuccessful"])
+    home_tackles_success = json.dumps(match.doc["home"]["stats"]["tacklesSuccess"])
+    home_dribbled_past = json.dumps(match.doc["home"]["stats"]["dribbledPast"])
+    home_dribbles_won = json.dumps(match.doc["home"]["stats"]["dribblesWon"])
+    home_dribbles_attempted = json.dumps(match.doc["home"]["stats"]["dribblesAttempted"])
+    home_dribbles_lost = json.dumps(match.doc["home"]["stats"]["dribblesLost"])
+    home_dribbleSuccess = json.dumps(match.doc["home"]["stats"]["dribbleSuccess"])
+    home_dispossessed = json.dumps(match.doc["home"]["stats"]["dispossessed"])
+    home_incident_events = json.dumps(match.doc["home"]["incidentEvents"])
 
-    # Report Auswärts
-
+    # Matchreport Auswärts
     away_average_age = match.doc["away"]["averageAge"]
     away_scores = match.doc["away"]["scores"]["fulltime"]
     away_scores_halftime = match.doc["away"]["scores"]["halftime"]
+    away_average_age = match.doc["away"]["averageAge"]
+    away_scores = match.doc["away"]["scores"]["fulltime"]
+    away_scores_halftime = match.doc["away"]["scores"]["halftime"]
+    away_ratings = json.dumps(match.doc["away"]["stats"]["ratings"])
+    away_shots_total = json.dumps(match.doc["away"]["stats"]["shotsTotal"])
+    away_shots_on_target = json.dumps(match.doc["away"]["stats"]["shotsOnTarget"])
+    away_shots_off_target = json.dumps(match.doc["away"]["stats"]["shotsOffTarget"])
+    away_shots_blocked = json.dumps(match.doc["away"]["stats"]["shotsBlocked"])
+    away_clearances = json.dumps(match.doc["away"]["stats"]["clearances"])
+    away_interceptions = json.dumps(match.doc["away"]["stats"]["interceptions"])
+    away_possesion = json.dumps(match.doc["away"]["stats"]["possession"])
+    away_touches = json.dumps(match.doc["away"]["stats"]["touches"])
+    away_passes_total = json.dumps(match.doc["away"]["stats"]["passesTotal"])
+    away_passes_accurate = json.dumps(match.doc["away"]["stats"]["passesAccurate"])
+    away_passes_key = json.dumps(match.doc["away"]["stats"]["passesKey"])
+    away_pass_success = json.dumps(match.doc["away"]["stats"]["passSuccess"])
+    away_aerials_total = json.dumps(match.doc["away"]["stats"]["aerialsTotal"])
+    away_aerials_won = json.dumps(match.doc["away"]["stats"]["aerialsWon"])
+    away_aerials_success = json.dumps(match.doc["away"]["stats"]["aerialsSuccess"])
+    away_offensive_aerials = json.dumps(match.doc["away"]["stats"]["offensiveAerials"])
+    away_defensive_aerials = json.dumps(match.doc["away"]["stats"]["defensiveAerials"])
+    away_corners_total = json.dumps(match.doc["away"]["stats"]["cornersTotal"])
+    away_throw_ins_total = json.dumps(match.doc["away"]["stats"]["throwInsTotal"])
+    away_throw_ins_accurate = json.dumps(match.doc["away"]["stats"]["throwInsAccurate"])
+    away_fouls_commited = json.dumps(match.doc["away"]["stats"]["foulsCommited"])
+    away_tackles_total = json.dumps(match.doc["away"]["stats"]["tacklesTotal"])
+    away_tackles_successful = json.dumps(match.doc["away"]["stats"]["tacklesSuccessful"])
+    away_tackles_unsuccesful = json.dumps(match.doc["away"]["stats"]["tacklesUnsuccessful"])
+    away_tackles_success = json.dumps(match.doc["away"]["stats"]["tacklesSuccess"])
+    away_dribbled_past = json.dumps(match.doc["away"]["stats"]["dribbledPast"])
+    away_dribbles_won = json.dumps(match.doc["away"]["stats"]["dribblesWon"])
+    away_dribbles_attempted = json.dumps(match.doc["away"]["stats"]["dribblesAttempted"])
+    away_dribbles_lost = json.dumps(match.doc["away"]["stats"]["dribblesLost"])
+    away_dribbleSuccess = json.dumps(match.doc["away"]["stats"]["dribbleSuccess"])
+    away_dispossessed = json.dumps(match.doc["away"]["stats"]["dispossessed"])
+    away_incident_events = json.dumps(match.doc["away"]["incidentEvents"])
 
     # Match Report hinzufügen
-
-    match_report = MatchReport(home_scores=home_scores, home_scores_ht=home_scores_halftime,
-                               away_scores=away_scores, away_scores_ht=away_scores_halftime,
-                               home_average_age=home_average_age, away_average_age=away_average_age,
-                               website="whoscored.com", match_id=match_game.id)
+    match_report = MatchReport(website="whoscored.com", match_id=match_game.id,
+                               # Home Attributes
+                               home_scores=home_scores,
+                               home_scores_ht=home_scores_halftime,
+                               home_average_age=home_average_age,
+                               home_ratings=home_ratings,
+                               home_shots_total=home_shots_total,
+                               home_shots_on_target=home_shots_on_target,
+                               home_shots_off_target=home_shots_off_target,
+                               home_shots_blocked=home_shots_blocked,
+                               home_clearances=home_clearances,
+                               home_interceptions=home_interceptions,
+                               home_possesion=home_possesion,
+                               home_touches=home_touches,
+                               home_passes_total=home_passes_total,
+                               home_passes_accurate=home_passes_accurate,
+                               home_passes_key=home_passes_key,
+                               home_pass_success=home_pass_success,
+                               home_aerials_total=home_aerials_total,
+                               home_aerials_won=home_aerials_won,
+                               home_aerials_success=home_aerials_success,
+                               home_offensive_aerials=home_offensive_aerials,
+                               home_defensive_aerials=home_defensive_aerials,
+                               home_corners_total=home_corners_total,
+                               home_throw_ins_total=home_throw_ins_total,
+                               home_throw_ins_accurate=home_throw_ins_accurate,
+                               home_fouls_commited=home_fouls_commited,
+                               home_tackles_total=home_tackles_total,
+                               home_tackles_successful=home_tackles_successful,
+                               home_tackles_unsuccesful=home_tackles_unsuccesful,
+                               home_tackles_success=home_tackles_success,
+                               home_dribbled_past=home_dribbled_past,
+                               home_dribbles_won=home_dribbles_won,
+                               home_dribbles_attempted=home_dribbles_attempted,
+                               home_dribbles_lost=home_dribbles_lost,
+                               home_dribbleSuccess=home_dribbleSuccess,
+                               home_dispossessed=home_dispossessed,
+                               home_incident_events=home_incident_events,
+                               # Away Attributes
+                               away_scores=away_scores,
+                               away_scores_ht=away_scores_halftime,
+                               away_average_age=away_average_age,
+                               away_ratings=away_ratings,
+                               away_shots_total=away_shots_total,
+                               away_shots_on_target=away_shots_on_target,
+                               away_shots_off_target=away_shots_off_target,
+                               away_shots_blocked=away_shots_blocked,
+                               away_clearances=away_clearances,
+                               away_interceptions=away_interceptions,
+                               away_possesion=away_possesion,
+                               away_touches=away_touches,
+                               away_passes_total=away_passes_total,
+                               away_passes_accurate=away_passes_accurate,
+                               away_passes_key=away_passes_key,
+                               away_pass_success=away_pass_success,
+                               away_aerials_total=away_aerials_total,
+                               away_aerials_won=away_aerials_won,
+                               away_aerials_success=away_aerials_success,
+                               away_offensive_aerials=away_offensive_aerials,
+                               away_defensive_aerials=away_defensive_aerials,
+                               away_corners_total=away_corners_total,
+                               away_throw_ins_total=away_throw_ins_total,
+                               away_throw_ins_accurate=away_throw_ins_accurate,
+                               away_fouls_commited=away_fouls_commited,
+                               away_tackles_total=away_tackles_total,
+                               away_tackles_successful=away_tackles_successful,
+                               away_tackles_unsuccesful=away_tackles_unsuccesful,
+                               away_tackles_success=away_tackles_success,
+                               away_dribbled_past=away_dribbled_past,
+                               away_dribbles_won=away_dribbles_won,
+                               away_dribbles_attempted=away_dribbles_attempted,
+                               away_dribbles_lost=away_dribbles_lost,
+                               away_dribbleSuccess=away_dribbleSuccess,
+                               away_dispossessed=away_dispossessed,
+                               away_incident_events=away_incident_events
+                               )
     session_add(match_report)
     session_commit()
 
