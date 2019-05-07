@@ -16,6 +16,7 @@ from model.trainer import Trainer
 from model.player import Player
 from model.event import Event
 from model.league import League
+from model.referee import Referee
 from model.match_repor_event_ass import MatchReportAss
 from model.team_player_ass import TeamPlayerAss
 from model.team_trainer_ass import TeamTrainerAss
@@ -196,5 +197,17 @@ def get_match(id):
         Event ID holen
     """
     return session.query(Match).filter(Match.id == id).first()
+
+def check_referee(id):
+    """
+        Event prüfen
+    """
+    return session.query(Referee).filter(Referee.id == id).count()
+
+def get_referee(id):
+    """
+        Event ID holen
+    """
+    return session.query(Referee).filter(Referee.id == id).first()
 
 atexit.register(remove_session)

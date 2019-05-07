@@ -1,5 +1,5 @@
 from model.db import get_match_data, session_add, session_commit, check_league, check_team, check_trainer, get_trainer, \
-    get_team, check_player, get_player, get_league, get_season
+    get_team, check_player, get_player, get_league, get_season, check_referee, get_referee
 from model.season import Season
 from model.league import League
 
@@ -31,7 +31,7 @@ def parse():
         # Spieler Team hinzufügen
         add_player_team(match)
         # Trainer Team hinzufügen
-        # add_trainer_team(match)
+        add_trainer_team(match)
         # Add Referee
         add_referee(match)
         # Event Match Report hinzufügen
@@ -64,7 +64,10 @@ def add_player_team(match):
         print("No value in home")
 
     # Start des Spiels
-    start_time = parser.parse(match.doc["startTime"])
+    if "startTime" in match.doc:
+        start_time = parser.parse(match.doc["startTime"])
+    else:
+        print("No value in startTime")
 
     # Team hinzufügen
     if not check_team(home_team_id):
@@ -287,7 +290,7 @@ def add_event_match_report(match):
     home_pass_success = json.dumps(match.doc["home"]["stats"]["passSuccess"])
     home_aerials_total = json.dumps(match.doc["home"]["stats"]["aerialsTotal"])
     home_aerials_won = json.dumps(match.doc["home"]["stats"]["aerialsWon"])
-    home_aerials_success = json.dumps(match.doc["home"]["stats"]["aerialsSuccess"])
+    home_aerials_success = json.dumps(match.doc["home"]["stats"]["aerialSuccess"])
     home_offensive_aerials = json.dumps(match.doc["home"]["stats"]["offensiveAerials"])
     home_defensive_aerials = json.dumps(match.doc["home"]["stats"]["defensiveAerials"])
     home_corners_total = json.dumps(match.doc["home"]["stats"]["cornersTotal"])
@@ -295,14 +298,14 @@ def add_event_match_report(match):
     home_throw_ins_accurate = json.dumps(match.doc["home"]["stats"]["throwInsAccurate"])
     home_fouls_commited = json.dumps(match.doc["home"]["stats"]["foulsCommited"])
     home_tackles_total = json.dumps(match.doc["home"]["stats"]["tacklesTotal"])
-    home_tackles_successful = json.dumps(match.doc["home"]["stats"]["tacklesSuccessful"])
-    home_tackles_unsuccesful = json.dumps(match.doc["home"]["stats"]["tacklesUnsuccessful"])
-    home_tackles_success = json.dumps(match.doc["home"]["stats"]["tacklesSuccess"])
+    home_tackles_successful = json.dumps(match.doc["home"]["stats"]["tackleSuccessful"])
+    home_tackles_unsuccessful = json.dumps(match.doc["home"]["stats"]["tackleUnsuccesful"])
+    home_tackles_success = json.dumps(match.doc["home"]["stats"]["tackleSuccess"])
     home_dribbled_past = json.dumps(match.doc["home"]["stats"]["dribbledPast"])
     home_dribbles_won = json.dumps(match.doc["home"]["stats"]["dribblesWon"])
     home_dribbles_attempted = json.dumps(match.doc["home"]["stats"]["dribblesAttempted"])
     home_dribbles_lost = json.dumps(match.doc["home"]["stats"]["dribblesLost"])
-    home_dribbleSuccess = json.dumps(match.doc["home"]["stats"]["dribbleSuccess"])
+    home_dribble_success = json.dumps(match.doc["home"]["stats"]["dribbleSuccess"])
     home_dispossessed = json.dumps(match.doc["home"]["stats"]["dispossessed"])
     home_incident_events = json.dumps(match.doc["home"]["incidentEvents"])
 
@@ -325,7 +328,7 @@ def add_event_match_report(match):
     away_pass_success = json.dumps(match.doc["away"]["stats"]["passSuccess"])
     away_aerials_total = json.dumps(match.doc["away"]["stats"]["aerialsTotal"])
     away_aerials_won = json.dumps(match.doc["away"]["stats"]["aerialsWon"])
-    away_aerials_success = json.dumps(match.doc["away"]["stats"]["aerialsSuccess"])
+    away_aerials_success = json.dumps(match.doc["away"]["stats"]["aerialSuccess"])
     away_offensive_aerials = json.dumps(match.doc["away"]["stats"]["offensiveAerials"])
     away_defensive_aerials = json.dumps(match.doc["away"]["stats"]["defensiveAerials"])
     away_corners_total = json.dumps(match.doc["away"]["stats"]["cornersTotal"])
@@ -333,14 +336,14 @@ def add_event_match_report(match):
     away_throw_ins_accurate = json.dumps(match.doc["away"]["stats"]["throwInsAccurate"])
     away_fouls_commited = json.dumps(match.doc["away"]["stats"]["foulsCommited"])
     away_tackles_total = json.dumps(match.doc["away"]["stats"]["tacklesTotal"])
-    away_tackles_successful = json.dumps(match.doc["away"]["stats"]["tacklesSuccessful"])
-    away_tackles_unsuccesful = json.dumps(match.doc["away"]["stats"]["tacklesUnsuccessful"])
-    away_tackles_success = json.dumps(match.doc["away"]["stats"]["tacklesSuccess"])
+    away_tackles_successful = json.dumps(match.doc["away"]["stats"]["tackleSuccessful"])
+    away_tackles_unsuccessful = json.dumps(match.doc["away"]["stats"]["tackleUnsuccesful"])
+    away_tackles_success = json.dumps(match.doc["away"]["stats"]["tackleSuccess"])
     away_dribbled_past = json.dumps(match.doc["away"]["stats"]["dribbledPast"])
     away_dribbles_won = json.dumps(match.doc["away"]["stats"]["dribblesWon"])
     away_dribbles_attempted = json.dumps(match.doc["away"]["stats"]["dribblesAttempted"])
     away_dribbles_lost = json.dumps(match.doc["away"]["stats"]["dribblesLost"])
-    away_dribbleSuccess = json.dumps(match.doc["away"]["stats"]["dribbleSuccess"])
+    away_dribble_success = json.dumps(match.doc["away"]["stats"]["dribbleSuccess"])
     away_dispossessed = json.dumps(match.doc["away"]["stats"]["dispossessed"])
     away_incident_events = json.dumps(match.doc["away"]["incidentEvents"])
 
@@ -374,13 +377,13 @@ def add_event_match_report(match):
                                home_fouls_commited=home_fouls_commited,
                                home_tackles_total=home_tackles_total,
                                home_tackles_successful=home_tackles_successful,
-                               home_tackles_unsuccesful=home_tackles_unsuccesful,
+                               home_tackles_unsuccessful=home_tackles_unsuccessful,
                                home_tackles_success=home_tackles_success,
                                home_dribbled_past=home_dribbled_past,
                                home_dribbles_won=home_dribbles_won,
                                home_dribbles_attempted=home_dribbles_attempted,
                                home_dribbles_lost=home_dribbles_lost,
-                               home_dribble_success=home_dribbleSuccess,
+                               home_dribble_success=home_dribble_success,
                                home_dispossessed=home_dispossessed,
                                home_incident_events=home_incident_events,
                                # Away Attributes
@@ -411,13 +414,13 @@ def add_event_match_report(match):
                                away_fouls_commited=away_fouls_commited,
                                away_tackles_total=away_tackles_total,
                                away_tackles_successful=away_tackles_successful,
-                               away_tackles_unsuccesful=away_tackles_unsuccesful,
+                               away_tackles_unsuccessful=away_tackles_unsuccessful,
                                away_tackles_success=away_tackles_success,
                                away_dribbled_past=away_dribbled_past,
                                away_dribbles_won=away_dribbles_won,
                                away_dribbles_attempted=away_dribbles_attempted,
                                away_dribbles_lost=away_dribbles_lost,
-                               away_dribble_success=away_dribbleSuccess,
+                               away_dribble_success=away_dribble_success,
                                away_dispossessed=away_dispossessed,
                                away_incident_events=away_incident_events)
     session_add(match_report)
@@ -434,6 +437,9 @@ def add_referee(match):
     referee_first_name = match.doc["referee"]["firstName"]
     referee_last_name = match.doc["referee"]["lastName"]
 
-    referee = Referee(id=referee_id, first_name=referee_first_name, last_name=referee_last_name)
-    session_add(referee)
-    session_commit()
+    if not check_referee(referee_id):
+        referee = Referee(id=referee_id, first_name=referee_first_name, last_name=referee_last_name)
+        session_add(referee)
+        session_commit()
+    else:
+        referee = get_referee(referee_id)

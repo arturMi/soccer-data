@@ -8,10 +8,7 @@ class Trainer(Base):
     __tablename__ = 'trainer'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    first_name = Column(VARCHAR, nullable=False)
     name = Column(VARCHAR, nullable=False)
-    birthday = Column(Date, nullable=False)
-    nationality = Column(VARCHAR, nullable=False)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
