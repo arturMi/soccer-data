@@ -48,7 +48,6 @@ class MatchReport(Base):
     home_dribbles_lost = Column(JSON)
     home_dribble_success = Column(JSON)
     home_dispossessed = Column(JSON)
-    home_incident_events = Column(JSON)
     #Away Columns
     away_average_age = Column(JSON)
     away_scores = Column(JSON)
@@ -85,7 +84,6 @@ class MatchReport(Base):
     away_dribbles_lost = Column(JSON)
     away_dribble_success = Column(JSON)
     away_dispossessed = Column(JSON)
-    away_incident_events = Column(JSON)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
