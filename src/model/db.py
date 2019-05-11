@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import scoped_session, sessionmaker
 from model.config import SQLALCHEMY_DATABASE_URI
 import atexit
@@ -209,5 +209,8 @@ def get_referee(id):
         Event ID holen
     """
     return session.query(Referee).filter(Referee.id == id).first()
+
+def get_sorted_matches(season_id):
+    return session.query(Match).filter(Match.season_id == season_id).order_by(asc(Match.date))
 
 atexit.register(remove_session)

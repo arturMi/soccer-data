@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, VARCHAR, Date, ForeignKey
+from sqlalchemy import Column, Integer, JSON, Date, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
 from model.season import Season
@@ -11,7 +11,7 @@ class Table(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(Date, nullable=False)
-    table = Column(VARCHAR, nullable=False)
+    table = Column(JSON, nullable=False)
     match_day = Column(Integer, nullable=False)
     season_id = Column(Integer, ForeignKey(Season.id), nullable=False)
 

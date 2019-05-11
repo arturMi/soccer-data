@@ -1,6 +1,7 @@
 from model.db import create_tables, get_match_day_data, generate_game_url, get_match_data
 from crawl.crawl import get_game_data, crawl_match_day_data, crawl_match_data
 from crawl.parse import parse
+from crawl.compute_table import compute_table
 
 
 if __name__ == "__main__":
@@ -9,6 +10,7 @@ if __name__ == "__main__":
     # crawl_match_day_data("2017/2018")
     # generate_game_url("2017/2018")
     # crawl_match_data()
-    parse()
+    # parse()
+    compute_table(3)
 
 
