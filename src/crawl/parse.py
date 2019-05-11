@@ -77,7 +77,7 @@ def add_player_team(match):
     else:
         home_team = get_team(home_team_id)
 
-    # Heimspieler hinzufügen
+        # Heimspieler hinzufügen
         if "players" in match.doc["home"]:
             for player in match.doc["home"]["players"]:
                 if "playerId" in match.doc["home"]["players"]:
@@ -173,7 +173,7 @@ def add_player_team(match):
     else:
         away_team = get_team(away_team_id)
 
-    # Auswärtsspieler hinzufügen
+        # Auswärtsspieler hinzufügen
         if "players" in match.doc["away"]:
             for player in match.doc["away"]["players"]:
                 if "playerId" in match.doc["away"]["players"]:
@@ -310,13 +310,13 @@ def add_trainer_team(match):
 
 def add_event_match_report(match):
     home_team = match.doc["home"]["name"]
+    home_team_id = match.doc["home"]["teamId"]
     away_team = match.doc["away"]["name"]
+    away_team_id = match.doc["away"]["teamId"]
     score_final = match.doc["score"]
     score_halftime = match.doc["htScore"]
     start_time = parser.parse(match.doc["startTime"])
     stadion = match.doc["venueName"]
-    home_team_id = match.doc["home"]["teamId"]
-    away_team_id = match.doc["away"]["teamId"]
     league = get_league("Bundesliga")
     season_id = get_season(2017, league.id).id
 
@@ -333,29 +333,56 @@ def add_event_match_report(match):
     session_commit()
 
     # Event hinzufügen
-    for event in match.doc["events"]:
-        # event_id = event["id"]
-        team_id = event["teamId"]
-        minute = event["minute"]
-        if "second" in event:
-            second = event["second"]
-        else:
-            second = 0
-        event_type = event["type"]["displayName"]
-        event_outcome = event["outcomeType"]["displayName"]
-        x_coord = event["x"]
-        y_coord = event["y"]
-        event_doc = event
+    if "events" in match.doc:
+        for event in match.doc["events"]:
+            if "teamId" in event:
+                team_id = event["teamId"]
+            else:
+                team_id = json.dumps({})
+                print("No teamId in events given.")
+            if "minute" in event:
+                minute = event["minute"]
+            else:
+                minute = json.dumps({})
+                print("No minute in events given.")
+            if "second" in event:
+                second = event["second"]
+            else:
+                second = json.dumps({})
+                print("No second in events given.")
+            if "displayName" in event["type"]:
+                event_type = event["type"]["displayName"]
+            else:
+                event_type = json.dumps({})
+                print("No displayName in event type given.")
+            if "displayName" in event["outcomeType"]:
+                event_outcome = event["outcomeType"]["displayName"]
+            else:
+                event_type = json.dumps({})
+                print("No displayName in event outcomeType given.")
+            if "x" in event:
+                x_coord = event["x"]
+            else:
+                x_coord = json.dumps({})
+                print("No x in event given.")
+            if "y" in event:
+                y_coord = event["y"]
+            else:
+                y_coord = json.dumps({})
+                print("No y in event given.")
+            event_doc = event
 
-        if event_outcome == "Successful":
-            event_outcome = True
-        else:
-            event_outcome = False
+            if event_outcome == "Successful":
+                event_outcome = True
+            else:
+                event_outcome = False
 
         event = Event(team_id=team_id, minute=minute, second=second, type=event_type, outcome_successful=event_outcome,
                       x=x_coord, y=y_coord, data=event_doc)
         session_add(event)
         session_commit()
+    else:
+        print("No events given.")
 
     # Matchreport Heim
     if "home" in match.doc:
@@ -363,18 +390,18 @@ def add_event_match_report(match):
             home_average_age = match.doc["home"]["averageAge"]
         else:
             home_average_age = json.dumps({})
-            print("No averageAge value given.")
+            print("No averageAge in home given.")
         if "scores" in match.doc["home"]:
             if "fulltime" in match.doc["home"]["scores"]:
                 home_scores = match.doc["home"]["scores"]["fulltime"]
             else:
                 home_scores = json.dumps({})
-                print("No fulltime in scores given.")
+                print("No fulltime in home scores given.")
             if "halftime" in match.doc["home"]["scores"]:
                 home_scores_halftime = match.doc["home"]["scores"]["halftime"]
             else:
                 home_scores_halftime = json.dumps({})
-                print("No halftime in scores given.")
+                print("No halftime in home scores given.")
         else:
             print("No scores in home.")
         if "stats" in match.doc["home"]:
@@ -382,162 +409,162 @@ def add_event_match_report(match):
                 home_ratings = json.dumps(match.doc["home"]["stats"]["ratings"])
             else:
                 home_ratings = json.dumps({})
-                print("No ratings in stats given.")
+                print("No ratings in home stats given.")
             if "shotsTotal" in match.doc["home"]["stats"]:
                 home_shots_total = json.dumps(match.doc["home"]["stats"]["shotsTotal"])
             else:
                 home_shots_total = json.dumps({})
-                print("No value in home given.")
+                print("No shotsTotal in home given.")
             if "shotsOnTarget" in match.doc["home"]["stats"]:
                 home_shots_on_target = json.dumps(match.doc["home"]["stats"]["shotsOnTarget"])
             else:
                 home_shots_on_target = json.dumps({})
-                print("No value in home given.")
+                print("No shotsOnTarget in home given.")
             if "shotsOffTarget" in match.doc["home"]["stats"]:
                 home_shots_off_target = json.dumps(match.doc["home"]["stats"]["shotsOffTarget"])
             else:
                 home_shots_off_target = json.dumps({})
-                print("No value in home given.")
+                print("No shotsOffTarget in home given.")
             if "shotsBlocked" in match.doc["home"]["stats"]:
                 home_shots_blocked = json.dumps(match.doc["home"]["stats"]["shotsBlocked"])
             else:
                 home_shots_blocked = json.dumps({})
-                print("No value in home given.")
+                print("No shotsBlocked in home given.")
             if "clearances" in match.doc["home"]["stats"]:
                 home_clearances = json.dumps(match.doc["home"]["stats"]["clearances"])
             else:
                 home_clearances = json.dumps({})
-                print("No value in home given.")
+                print("No clearances in home given.")
             if "interceptions" in match.doc["home"]["stats"]:
                 home_interceptions = json.dumps(match.doc["home"]["stats"]["interceptions"])
             else:
                 home_interceptions = json.dumps({})
-                print("No value in home given.")
+                print("No interceptions in home given.")
             if "possession" in match.doc["home"]["stats"]:
                 home_possesion = json.dumps(match.doc["home"]["stats"]["possession"])
             else:
                 home_possesion = json.dumps({})
-                print("No value in home given.")
+                print("No possession in home given.")
             if "touches" in match.doc["home"]["stats"]:
                 home_touches = json.dumps(match.doc["home"]["stats"]["touches"])
             else:
                 home_touches = json.dumps({})
-                print("No value in home given.")
+                print("No touches in home given.")
             if "passesTotal" in match.doc["home"]["stats"]:
                 home_passes_total = json.dumps(match.doc["home"]["stats"]["passesTotal"])
             else:
                 home_passes_total = json.dumps({})
-                print("No value in home given.")
+                print("No passesTotal in home given.")
             if "passesAccurate" in match.doc["home"]["stats"]:
                 home_passes_accurate = json.dumps(match.doc["home"]["stats"]["passesAccurate"])
             else:
                 home_passes_accurate = json.dumps({})
-                print("No value in home given.")
+                print("No passesAccurate in home given.")
             if "passesKey" in match.doc["home"]["stats"]:
                 home_passes_key = json.dumps(match.doc["home"]["stats"]["passesKey"])
             else:
                 home_passes_key = json.dumps({})
-                print("No value in home given.")
+                print("No passesKey in home given.")
             if "passSuccess" in match.doc["home"]["stats"]:
                 home_pass_success = json.dumps(match.doc["home"]["stats"]["passSuccess"])
             else:
                 home_pass_success = json.dumps({})
-                print("No value in home given.")
+                print("No passSuccess in home given.")
             if "aerialsTotal" in match.doc["home"]["stats"]:
                 home_aerials_total = json.dumps(match.doc["home"]["stats"]["aerialsTotal"])
             else:
                 home_aerials_total = json.dumps({})
-                print("No value in home given.")
+                print("No aerialsTotal in home given.")
             if "aerialsWon" in match.doc["home"]["stats"]:
                 home_aerials_won = json.dumps(match.doc["home"]["stats"]["aerialsWon"])
             else:
                 home_aerials_won = json.dumps({})
-                print("No value in home given.")
+                print("No aerialsWon in home given.")
             if "aerialSuccess" in match.doc["home"]["stats"]:
                 home_aerials_success = json.dumps(match.doc["home"]["stats"]["aerialSuccess"])
             else:
                 home_aerials_success = json.dumps({})
-                print("No value in home given.")
+                print("No aerialSuccess in home given.")
             if "offensiveAerials" in match.doc["home"]["stats"]:
                 home_offensive_aerials = json.dumps(match.doc["home"]["stats"]["offensiveAerials"])
             else:
                 home_offensive_aerials = json.dumps({})
-                print("No value in home given.")
+                print("No offensiveAerials in home given.")
             if "defensiveAerials" in match.doc["home"]["stats"]:
                 home_defensive_aerials = json.dumps(match.doc["home"]["stats"]["defensiveAerials"])
             else:
                 home_defensive_aerials = json.dumps({})
-                print("No value in home given.")
+                print("No defensiveAerials in home given.")
             if "cornersTotal" in match.doc["home"]["stats"]:
                 home_corners_total = json.dumps(match.doc["home"]["stats"]["cornersTotal"])
             else:
                 home_corners_total = json.dumps({})
-                print("No value in home given.")
+                print("No cornersTotal in home given.")
             if "throwInsTotal" in match.doc["home"]["stats"]:
                 home_throw_ins_total = json.dumps(match.doc["home"]["stats"]["throwInsTotal"])
             else:
                 home_throw_ins_total = json.dumps({})
-                print("No value in home given.")
+                print("No throwInsTotal in home given.")
             if "throwInsAccurate" in match.doc["home"]["stats"]:
                 home_throw_ins_accurate = json.dumps(match.doc["home"]["stats"]["throwInsAccurate"])
             else:
                 home_throw_ins_accurate = json.dumps({})
-                print("No value in home given.")
+                print("No throwInsAccurate in home given.")
             if "foulsCommited" in match.doc["home"]["stats"]:
                 home_fouls_commited = json.dumps(match.doc["home"]["stats"]["foulsCommited"])
             else:
                 home_fouls_commited = json.dumps({})
-                print("No value in home given.")
+                print("No foulsCommited in home given.")
             if "tacklesTotal" in match.doc["home"]["stats"]:
                 home_tackles_total = json.dumps(match.doc["home"]["stats"]["tacklesTotal"])
             else:
                 home_tackles_total = json.dumps({})
-                print("No value in home given.")
+                print("No tacklesTotal in home given.")
             if "tackleSuccessful" in match.doc["home"]["stats"]:
                 home_tackles_successful = json.dumps(match.doc["home"]["stats"]["tackleSuccessful"])
             else:
                 home_tackles_successful = json.dumps({})
-                print("No value in home given.")
+                print("No tackleSuccessful in home given.")
             if "tackleUnsuccesful" in match.doc["home"]["stats"]:
                 home_tackles_unsuccessful = json.dumps(match.doc["home"]["stats"]["tackleUnsuccesful"])
             else:
                 home_tackles_unsuccessful = json.dumps({})
-                print("No value in home given.")
+                print("No tackleUnsuccesful in home given.")
             if "tackleSuccess" in match.doc["home"]["stats"]:
                 home_tackles_success = json.dumps(match.doc["home"]["stats"]["tackleSuccess"])
             else:
                 home_tackles_success = json.dumps({})
-                print("No value in home given.")
+                print("No tackleSuccess in home given.")
             if "dribbledPast" in match.doc["home"]["stats"]:
                 home_dribbled_past = json.dumps(match.doc["home"]["stats"]["dribbledPast"])
             else:
                 home_dribbled_past = json.dumps({})
-                print("No value in home given.")
+                print("No dribbledPast in home given.")
             if "dribblesWon" in match.doc["home"]["stats"]:
                 home_dribbles_won = json.dumps(match.doc["home"]["stats"]["dribblesWon"])
             else:
                 home_dribbles_won = json.dumps({})
-                print("No value in home given.")
+                print("No dribblesWon in home given.")
             if "dribblesAttempted" in match.doc["home"]["stats"]:
                 home_dribbles_attempted = json.dumps(match.doc["home"]["stats"]["dribblesAttempted"])
             else:
                 home_dribbles_attempted = json.dumps({})
-                print("No value in home given.")
+                print("No dribblesAttempted in home given.")
             if "dribblesLost" in match.doc["home"]["stats"]:
                 home_dribbles_lost = json.dumps(match.doc["home"]["stats"]["dribblesLost"])
             else:
                 home_dribbles_lost = json.dumps({})
-                print("No value in home given.")
+                print("No dribblesLost in home given.")
             if "dribbleSuccess" in match.doc["home"]["stats"]:
                 home_dribble_success = json.dumps(match.doc["home"]["stats"]["dribbleSuccess"])
             else:
                 home_dribble_success = json.dumps({})
-                print("No value in home given.")
+                print("No dribbleSuccess in home given.")
             if "dispossessed" in match.doc["home"]["stats"]:
                 home_dispossessed = json.dumps(match.doc["home"]["stats"]["dispossessed"])
             else:
                 home_dispossessed = json.dumps({})
-                print("No value in home given.")
+                print("No dispossessed in home given.")
         else:
             print("No stats in home.")
     else:
@@ -549,18 +576,18 @@ def add_event_match_report(match):
             away_average_age = match.doc["away"]["averageAge"]
         else:
             away_average_age = json.dumps({})
-            print("No averageAge value given.")
+            print("No averageAge in away given.")
         if "scores" in match.doc["away"]:
             if "fulltime" in match.doc["away"]["scores"]:
                 away_scores = match.doc["away"]["scores"]["fulltime"]
             else:
                 away_scores = json.dumps({})
-                print("No fulltime in scores given.")
+                print("No fulltime in away scores given.")
             if "halftime" in match.doc["away"]["scores"]:
                 away_scores_halftime = match.doc["away"]["scores"]["halftime"]
             else:
                 away_scores_halftime = json.dumps({})
-                print("No halftime in scores given.")
+                print("No halftime in away scores given.")
         else:
             print("No scores in away.")
         if "stats" in match.doc["away"]:
@@ -568,166 +595,166 @@ def add_event_match_report(match):
                 away_ratings = json.dumps(match.doc["away"]["stats"]["ratings"])
             else:
                 away_ratings = json.dumps({})
-                print("No ratings in stats given.")
+                print("No ratings in away stats given.")
             if "shotsTotal" in match.doc["away"]["stats"]:
                 away_shots_total = json.dumps(match.doc["away"]["stats"]["shotsTotal"])
             else:
                 away_shots_total = json.dumps({})
-                print("No value in away given.")
+                print("No shotsTotal in away given.")
             if "shotsOnTarget" in match.doc["away"]["stats"]:
                 away_shots_on_target = json.dumps(match.doc["away"]["stats"]["shotsOnTarget"])
             else:
                 away_shots_on_target = json.dumps({})
-                print("No value in away given.")
+                print("No shotsOnTarget in away given.")
             if "shotsOffTarget" in match.doc["away"]["stats"]:
                 away_shots_off_target = json.dumps(match.doc["away"]["stats"]["shotsOffTarget"])
             else:
                 away_shots_off_target = json.dumps({})
-                print("No value in away given.")
+                print("No shotsOffTarget in away given.")
             if "shotsBlocked" in match.doc["away"]["stats"]:
                 away_shots_blocked = json.dumps(match.doc["away"]["stats"]["shotsBlocked"])
             else:
                 away_shots_blocked = json.dumps({})
-                print("No value in away given.")
+                print("No shotsBlocked in away given.")
             if "clearances" in match.doc["away"]["stats"]:
                 away_clearances = json.dumps(match.doc["away"]["stats"]["clearances"])
             else:
                 away_clearances = json.dumps({})
-                print("No value in away given.")
+                print("No clearances in away given.")
             if "interceptions" in match.doc["away"]["stats"]:
                 away_interceptions = json.dumps(match.doc["away"]["stats"]["interceptions"])
             else:
                 away_interceptions = json.dumps({})
-                print("No value in away given.")
+                print("No interceptions in away given.")
             if "possession" in match.doc["away"]["stats"]:
                 away_possesion = json.dumps(match.doc["away"]["stats"]["possession"])
             else:
                 away_possesion = json.dumps({})
-                print("No value in away given.")
+                print("No possession in away given.")
             if "touches" in match.doc["away"]["stats"]:
                 away_touches = json.dumps(match.doc["away"]["stats"]["touches"])
             else:
                 away_touches = json.dumps({})
-                print("No value in away given.")
+                print("No touches in away given.")
             if "passesTotal" in match.doc["away"]["stats"]:
                 away_passes_total = json.dumps(match.doc["away"]["stats"]["passesTotal"])
             else:
                 away_passes_total = json.dumps({})
-                print("No value in away given.")
+                print("No passesTotal in away given.")
             if "passesAccurate" in match.doc["away"]["stats"]:
                 away_passes_accurate = json.dumps(match.doc["away"]["stats"]["passesAccurate"])
             else:
                 away_passes_accurate = json.dumps({})
-                print("No value in away given.")
+                print("No passesAccurate in away given.")
             if "passesKey" in match.doc["away"]["stats"]:
                 away_passes_key = json.dumps(match.doc["away"]["stats"]["passesKey"])
             else:
                 away_passes_key = json.dumps({})
-                print("No value in away given.")
+                print("No passesKey in away given.")
             if "passSuccess" in match.doc["away"]["stats"]:
                 away_pass_success = json.dumps(match.doc["away"]["stats"]["passSuccess"])
             else:
                 away_pass_success = json.dumps({})
-                print("No value in away given.")
+                print("No passSuccess in away given.")
             if "aerialsTotal" in match.doc["away"]["stats"]:
                 away_aerials_total = json.dumps(match.doc["away"]["stats"]["aerialsTotal"])
             else:
                 away_aerials_total = json.dumps({})
-                print("No value in away given.")
+                print("No aerialsTotal in away given.")
             if "aerialsWon" in match.doc["away"]["stats"]:
                 away_aerials_won = json.dumps(match.doc["away"]["stats"]["aerialsWon"])
             else:
                 away_aerials_won = json.dumps({})
-                print("No value in away given.")
+                print("No aerialsWon in away given.")
             if "aerialSuccess" in match.doc["away"]["stats"]:
                 away_aerials_success = json.dumps(match.doc["away"]["stats"]["aerialSuccess"])
             else:
                 away_aerials_success = json.dumps({})
-                print("No value in away given.")
+                print("No aerialSuccess in away given.")
             if "offensiveAerials" in match.doc["away"]["stats"]:
                 away_offensive_aerials = json.dumps(match.doc["away"]["stats"]["offensiveAerials"])
             else:
                 away_offensive_aerials = json.dumps({})
-                print("No value in away given.")
+                print("No offensiveAerials in away given.")
             if "defensiveAerials" in match.doc["away"]["stats"]:
                 away_defensive_aerials = json.dumps(match.doc["away"]["stats"]["defensiveAerials"])
             else:
                 away_defensive_aerials = json.dumps({})
-                print("No value in away given.")
+                print("No defensiveAerials in away given.")
             if "cornersTotal" in match.doc["away"]["stats"]:
                 away_corners_total = json.dumps(match.doc["away"]["stats"]["cornersTotal"])
             else:
                 away_corners_total = json.dumps({})
-                print("No value in away given.")
+                print("No cornersTotal in away given.")
             if "throwInsTotal" in match.doc["away"]["stats"]:
                 away_throw_ins_total = json.dumps(match.doc["away"]["stats"]["throwInsTotal"])
             else:
                 away_throw_ins_total = json.dumps({})
-                print("No value in away given.")
+                print("No throwInsTotal in away given.")
             if "throwInsAccurate" in match.doc["away"]["stats"]:
                 away_throw_ins_accurate = json.dumps(match.doc["away"]["stats"]["throwInsAccurate"])
             else:
                 away_throw_ins_accurate = json.dumps({})
-                print("No value in away given.")
+                print("No throwInsAccurate in away given.")
             if "foulsCommited" in match.doc["away"]["stats"]:
                 away_fouls_commited = json.dumps(match.doc["away"]["stats"]["foulsCommited"])
             else:
                 away_fouls_commited = json.dumps({})
-                print("No value in away given.")
+                print("No foulsCommited in away given.")
             if "tacklesTotal" in match.doc["away"]["stats"]:
                 away_tackles_total = json.dumps(match.doc["away"]["stats"]["tacklesTotal"])
             else:
                 away_tackles_total = json.dumps({})
-                print("No value in away given.")
+                print("No tacklesTotal in away given.")
             if "tackleSuccessful" in match.doc["away"]["stats"]:
                 away_tackles_successful = json.dumps(match.doc["away"]["stats"]["tackleSuccessful"])
             else:
                 away_tackles_successful = json.dumps({})
-                print("No value in away given.")
+                print("No tackleSuccessful in away given.")
             if "tackleUnsuccesful" in match.doc["away"]["stats"]:
                 away_tackles_unsuccessful = json.dumps(match.doc["away"]["stats"]["tackleUnsuccesful"])
             else:
                 away_tackles_unsuccessful = json.dumps({})
-                print("No value in away given.")
+                print("No tackleUnsuccesful in away given.")
             if "tackleSuccess" in match.doc["away"]["stats"]:
                 away_tackles_success = json.dumps(match.doc["away"]["stats"]["tackleSuccess"])
             else:
                 away_tackles_success = json.dumps({})
-                print("No value in away given.")
+                print("No tackleSuccess in away given.")
             if "dribbledPast" in match.doc["away"]["stats"]:
                 away_dribbled_past = json.dumps(match.doc["away"]["stats"]["dribbledPast"])
             else:
                 away_dribbled_past = json.dumps({})
-                print("No value in away given.")
+                print("No dribbledPast in away given.")
             if "dribblesWon" in match.doc["away"]["stats"]:
                 away_dribbles_won = json.dumps(match.doc["away"]["stats"]["dribblesWon"])
             else:
                 away_dribbles_won = json.dumps({})
-                print("No value in away given.")
+                print("No dribblesWon in away given.")
             if "dribblesAttempted" in match.doc["away"]["stats"]:
                 away_dribbles_attempted = json.dumps(match.doc["away"]["stats"]["dribblesAttempted"])
             else:
                 away_dribbles_attempted = json.dumps({})
-                print("No value in away given.")
+                print("No dribblesAttempted in away given.")
             if "dribblesLost" in match.doc["away"]["stats"]:
                 away_dribbles_lost = json.dumps(match.doc["away"]["stats"]["dribblesLost"])
             else:
                 away_dribbles_lost = json.dumps({})
-                print("No value in away given.")
+                print("No dribblesLost in away given.")
             if "dribbleSuccess" in match.doc["away"]["stats"]:
                 away_dribble_success = json.dumps(match.doc["away"]["stats"]["dribbleSuccess"])
             else:
                 away_dribble_success = json.dumps({})
-                print("No value in away given.")
+                print("No dribbleSuccess in away given.")
             if "dispossessed" in match.doc["away"]["stats"]:
                 away_dispossessed = json.dumps(match.doc["away"]["stats"]["dispossessed"])
             else:
                 away_dispossessed = json.dumps({})
-                print("No value in away given.")
+                print("No dispossessed in away given.")
         else:
             print("No stats in away.")
     else:
-        print("No away value given.")
+        print("No away team given.")
 
     # Match Report hinzufügen
     match_report = MatchReport(website="whoscored.com", match_id=match_game.id,
