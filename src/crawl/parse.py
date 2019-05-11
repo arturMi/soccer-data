@@ -78,23 +78,58 @@ def add_player_team(match):
         home_team = get_team(home_team_id)
 
     # Heimspieler hinzufügen
-    for player in match.doc["home"]["players"]:
-        # Unique Player-ID
-        home_player_id = player["playerId"]
-        # Name
-        home_player_name = player["name"]
-        # Shirt Nummer
-        home_player_shirt = player["shirtNo"]
-        # Position
-        home_player_position = player["position"]
-        # Größe
-        home_player_height = player["height"]
-        # Gewicht
-        home_player_weight = player["weight"]
-        # Alter
-        home_player_age = player["age"]
-        # Statistik
-        home_player_statistics = json.dumps(player["stats"])
+        if "players" in match.doc["home"]:
+            for player in match.doc["home"]["players"]:
+                if "playerId" in match.doc["home"]["players"]:
+                    # Unique Player-ID
+                    home_player_id = player["playerId"]
+                else:
+                    home_player_id = json.dumps({})
+                    print("No playerId in home given.")
+                if "name" in match.doc["home"]["players"]:
+                    # Name
+                    home_player_name = player["name"]
+                else:
+                    home_player_name = json.dumps({})
+                    print("No name in home given.")
+                if "shirtNo" in match.doc["home"]["players"]:
+                    # Shirt Nummer
+                    home_player_shirt = player["shirtNo"]
+                else:
+                    home_player_shirt = json.dumps({})
+                    print("No shirtNo in home given.")
+                if "position" in match.doc["home"]["players"]:
+                    # Position
+                    home_player_position = player["position"]
+                else:
+                    home_player_position = json.dumps({})
+                    print("No position in home given.")
+                if "height" in match.doc["home"]["players"]:
+                    # Größe
+                    home_player_height = player["height"]
+                else:
+                    home_player_height = json.dumps({})
+                    print("No height in home given.")
+                if "weight" in match.doc["home"]["players"]:
+                    # Gewicht
+                    home_player_weight = player["weight"]
+                else:
+                    home_player_weight = json.dumps({})
+                    print("No weight in home given.")
+                if "age" in match.doc["home"]["players"]:
+                    # Alter
+                    home_player_age = player["age"]
+                else:
+                    home_player_age = json.dumps({})
+                    print("No age in home given")
+                if "stats" in match.doc["home"]["players"]:
+                    # Statistik
+                    home_player_statistics = json.dumps(player["stats"])
+                else:
+                    home_player_statistics = json.dumps({})
+                    print("No stats in home given.")
+        else:
+            print("No players in home given.")
 
         # Spieler hinzufügen
         if not check_player(home_player_id):
@@ -112,11 +147,23 @@ def add_player_team(match):
         session_commit()
 
     # Auswärts Team-ID und Team Name
-    away_team_id = match.doc["away"]["teamId"]
-    away_team_name = match.doc["away"]["name"]
+    if "away" in match.doc:
+        if "teamId" in match.doc["away"]:
+            away_team_id = match.doc["away"]["teamId"]
+        else:
+            print("No teamId in away.")
+        if "name" in match.doc["away"]:
+            away_team_name = match.doc["away"]["name"]
+        else:
+            print("No name in away.")
+    else:
+        print("No away team given.")
 
     # Start des Spiels
-    start_time = parser.parse(match.doc["startTime"])
+    if "startTime" in match.doc:
+        start_time = parser.parse(match.doc["startTime"])
+    else:
+        print("No startTime given.")
 
     # Team hinzufügen
     if not check_team(away_team_id):
@@ -127,23 +174,58 @@ def add_player_team(match):
         away_team = get_team(away_team_id)
 
     # Auswärtsspieler hinzufügen
-    for player in match.doc["away"]["players"]:
-        # Unique Player-ID
-        away_player_id = player["playerId"]
-        # Name
-        away_player_name = player["name"]
-        # Shirt Nummer
-        away_player_shirt = player["shirtNo"]
-        # Position
-        away_player_position = player["position"]
-        # Größe
-        away_player_height = player["height"]
-        # Gewicht
-        away_player_weight = player["weight"]
-        # Alter
-        away_player_age = player["age"]
-        # Statistik
-        away_player_statistics = json.dumps(player["stats"])
+        if "players" in match.doc["away"]:
+            for player in match.doc["away"]["players"]:
+                if "playerId" in match.doc["away"]["players"]:
+                    # Unique Player-ID
+                    away_player_id = player["playerId"]
+                else:
+                    away_player_id = json.dumps({})
+                    print("No playerId in away given.")
+                if "name" in match.doc["away"]["players"]:
+                    # Name
+                    away_player_name = player["name"]
+                else:
+                    away_player_name = json.dumps({})
+                    print("No name in away given.")
+                if "shirtNo" in match.doc["away"]["players"]:
+                    # Shirt Nummer
+                    away_player_shirt = player["shirtNo"]
+                else:
+                    away_player_shirt = json.dumps({})
+                    print("No shirtNo in away given.")
+                if "position" in match.doc["away"]["players"]:
+                    # Position
+                    away_player_position = player["position"]
+                else:
+                    away_player_position = json.dumps({})
+                    print("No position in away given.")
+                if "height" in match.doc["away"]["players"]:
+                    # Größe
+                    away_player_height = player["height"]
+                else:
+                    away_player_height = json.dumps({})
+                    print("No height in away given.")
+                if "weight" in match.doc["away"]["players"]:
+                    # Gewicht
+                    away_player_weight = player["weight"]
+                else:
+                    away_player_weight = json.dumps({})
+                    print("No weight in away given.")
+                if "age" in match.doc["away"]["players"]:
+                    # Alter
+                    away_player_age = player["age"]
+                else:
+                    away_player_age = json.dumps({})
+                    print("No age in away given")
+                if "stats" in match.doc["away"]["players"]:
+                    # Statistik
+                    away_player_statistics = json.dumps(player["stats"])
+                else:
+                    away_player_statistics = json.dumps({})
+                    print("No stats in away given.")
+        else:
+            print("No players in away given.")
 
         # Spieler hinzufügen
         if not check_player(away_player_id):
@@ -237,12 +319,16 @@ def add_event_match_report(match):
     away_team_id = match.doc["away"]["teamId"]
     league = get_league("Bundesliga")
     season_id = get_season(2017, league.id).id
-    referee_id = match.doc["referee"]["officialId"]
 
-    # Spieler hinzufügen
-    match_game = Match(home_team=home_team, season_id=season_id, away_team=away_team, away_team_id=away_team_id,
-                       home_team_id=home_team_id, score_ht=score_halftime, score=score_final,
-                       date=start_time, location=stadion, referee_id=referee_id)
+    if "referee" in match.doc:
+        referee_id = match.doc["referee"]["officialId"]
+        match_game = Match(home_team=home_team, season_id=season_id, away_team=away_team, away_team_id=away_team_id,
+                           home_team_id=home_team_id, score_ht=score_halftime, score=score_final,
+                           date=start_time, location=stadion, referee_id=referee_id)
+    else:
+        match_game = Match(home_team=home_team, season_id=season_id, away_team=away_team, away_team_id=away_team_id,
+                           home_team_id=home_team_id, score_ht=score_halftime, score=score_final,
+                           date=start_time, location=stadion)
     session_add(match_game)
     session_commit()
 
@@ -425,6 +511,7 @@ def add_event_match_report(match):
             if "dribbledPast" in match.doc["home"]["stats"]:
                 home_dribbled_past = json.dumps(match.doc["home"]["stats"]["dribbledPast"])
             else:
+                home_dribbled_past = json.dumps({})
                 print("No value in home given.")
             if "dribblesWon" in match.doc["home"]["stats"]:
                 home_dribbles_won = json.dumps(match.doc["home"]["stats"]["dribblesWon"])
@@ -610,6 +697,7 @@ def add_event_match_report(match):
             if "dribbledPast" in match.doc["away"]["stats"]:
                 away_dribbled_past = json.dumps(match.doc["away"]["stats"]["dribbledPast"])
             else:
+                away_dribbled_past = json.dumps({})
                 print("No value in away given.")
             if "dribblesWon" in match.doc["away"]["stats"]:
                 away_dribbles_won = json.dumps(match.doc["away"]["stats"]["dribblesWon"])
@@ -725,13 +813,24 @@ def add_event_match_report(match):
 
 
 def add_referee(match):
-    referee_id = match.doc["referee"]["officialId"]
-    referee_first_name = match.doc["referee"]["firstName"]
-    referee_last_name = match.doc["referee"]["lastName"]
-
-    if not check_referee(referee_id):
-        referee = Referee(id=referee_id, first_name=referee_first_name, last_name=referee_last_name)
-        session_add(referee)
-        session_commit()
+    if "referee" in match.doc:
+        if "officialId" in match.doc["referee"]:
+            referee_id = match.doc["referee"]["officialId"]
+        else:
+            print("No officialId given.")
+        if "firstName" in match.doc["referee"]:
+            referee_first_name = match.doc["referee"]["firstName"]
+        else:
+            referee_first_name = json.dumps({})
+            print("No firstName in referee given.")
+        if "lastName" in match.doc["referee"]:
+            referee_last_name = match.doc["referee"]["lastName"]
+        else:
+            referee_last_name = json.dumps({})
+            print("No lastName in referee given.")
+        if not check_referee(referee_id):
+            referee = Referee(id=referee_id, first_name=referee_first_name, last_name=referee_last_name)
+            session_add(referee)
+            session_commit()
     else:
-        referee = get_referee(referee_id)
+        print("No referee given.")
